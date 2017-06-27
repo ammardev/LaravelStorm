@@ -1,7 +1,8 @@
 # LaravelStorm
 Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with laravel .
 
-##Current Tools:
+
+## Current Tools:
 
 *  Run Configuration: Allow user to run `php artisan serve` from the run menu in the IDE without using terminal (You can insert a custom port and host).
 
@@ -14,7 +15,7 @@ Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with larav
 
 ---
 
-##TODO:
+## TODO:
 
 * Allow user to choose the web browser to run the app using it .
 * Add migrations manager to manage migrations without writing commands.
