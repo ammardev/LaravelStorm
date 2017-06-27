@@ -6,7 +6,7 @@ Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with larav
 
 *  Run Configuration: Allow user to run `php artisan serve` from the run menu in the IDE without using terminal (You can insert a custom port and host).
 
-![image](https://user-images.githubusercontent.com/16087389/27578627-53ef10ae-5b2d-11e7-9805-c32b6c460e89.png)
+![image](https://user-images.githubusercontent.com/16087389/27585467-0b50c7da-5b45-11e7-9798-445df0f8ad01.png)
 
 
 * Laravel Files Creation Manager : Add an option in New menu to create laravel files (Such as Controllers, Models, Migrations ... etc) using  a simple dialog
