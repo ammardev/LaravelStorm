@@ -1,0 +1,31 @@
+<idea-plugin>
+  <id>com.smartbit8.laravelStorm.intellij</id>
+  <name>LaravelStorm</name>
+  <version>0.5</version>
+  <vendor email="3mmar.g97@gmail.com" url="">SmartBit8</vendor>
+
+  <description><![CDATA[
+      Useful tools for laravel development in IntelliJIdea and PhpStorm
+    ]]></description>
+
+  <change-notes><![CDATA[
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="145.0"/>
+
+  <depends>com.jetbrains.php</depends>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="com.smartbit8.laravelstorm.run.LaravelRunType"/>
+  </extensions>
+
+  <actions>
+    <action id="LaravelStorm.FileMaker" class="com.smartbit8.laravelstorm.actions.FileMaker"
+            text="Laravel file">
+      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+    </action>
+
+  </actions>
+</idea-plugin>
