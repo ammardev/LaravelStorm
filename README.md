@@ -17,5 +17,4 @@ Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with larav
 
 ##TODO:
 
-* Allow user to choose the web browser to run the app using it .
 * Add migrations manager to manage migrations without writing commands.
