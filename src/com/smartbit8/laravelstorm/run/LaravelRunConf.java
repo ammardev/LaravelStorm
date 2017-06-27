@@ -6,6 +6,7 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.ide.browsers.*;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
@@ -16,31 +17,44 @@ import com.smartbit8.laravelstorm.ui.LaravelRunConfSettingsEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.io.IOException;
+
 
 public class LaravelRunConf extends RunConfigurationBase {
     private Project project;
-    private int port = 8000;
     private String host = "localhost";
+    private int port = 8000;
+    private String route = "/";
+    private WebBrowser browser;
+
 
     LaravelRunConf(@NotNull Project project, @NotNull ConfigurationFactory factory, String name) {
         super(project, factory, name);
         this.project = project;
+
     }
 
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
         Settings settings = XmlSerializer.deserialize(element, Settings.class);
-        this.port = settings.port;
         this.host = settings.host;
+        this.port = settings.port;
+        this.route = settings.route;
+        this.browser = WebBrowserManager.getInstance().findBrowserById(settings.browser);
+
     }
 
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         Settings settings = new Settings();
-        settings.port = this.port;
         settings.host = this.host;
+        settings.port = this.port;
+        settings.route = this.route;
+        if (this.browser != null)
+            settings.browser = this.browser.getId().toString();
+        else
+            settings.browser = "";
+
         XmlSerializer.serializeInto(settings, element, new SkipDefaultsSerializationFilter());
         super.writeExternal(element);
     }
@@ -64,11 +78,8 @@ public class LaravelRunConf extends RunConfigurationBase {
                 GeneralCommandLine cmd = new GeneralCommandLine("php", "artisan", "serve", "--host=" + host, "--port="+ port);
                 cmd.setWorkDirectory(project.getBasePath());
 
-                try {
-                    Runtime.getRuntime().exec("google-chrome http://"+ host +":" + port);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                BrowserLauncher.getInstance().browse("http://" + host + ":" + port +
+                        (route.startsWith("/")? route : "/" + route), browser);
                 return new OSProcessHandler(cmd);
             }
         };
@@ -90,9 +101,27 @@ public class LaravelRunConf extends RunConfigurationBase {
         this.host = host;
     }
 
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(String route) {
+        this.route = route;
+    }
+
+    public WebBrowser getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(WebBrowser browser) {
+        this.browser = browser;
+    }
+
     public static class Settings {
         public String host;
         public int port;
+        public String route;
+        public String browser;
     }
 
 }
