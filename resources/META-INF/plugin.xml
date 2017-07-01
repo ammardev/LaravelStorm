@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.smartbit8.laravelStorm.intellij</id>
   <name>LaravelStorm</name>
-  <version>0.9</version>
+  <version>1.0</version>
   <vendor email="3mmar.g97@gmail.com" url="">SmartBit8</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      Add PHP interpreter selector in run configuration settings .
     ]]>
   </change-notes>
 

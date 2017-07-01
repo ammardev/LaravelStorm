@@ -4,15 +4,22 @@ import com.intellij.ide.browsers.BrowserSelector;
 import com.intellij.ide.browsers.WebBrowser;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.project.Project;
+import com.jetbrains.php.config.interpreters.PhpInterpreter;
+import com.jetbrains.php.config.interpreters.PhpInterpreterComboBox;
+import com.jetbrains.php.config.interpreters.PhpInterpretersManager;
+import com.jetbrains.php.config.interpreters.PhpInterpretersManagerImpl;
 import com.smartbit8.laravelstorm.run.LaravelRunConf;
 import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.UUID;
+import java.util.*;
+import java.util.List;
 
 
 public class LaravelRunConfSettingsEditor extends SettingsEditor<LaravelRunConf> {
+
     private JPanel mainPanel;
     private JTextField hostInput;
     private JSpinner portInput;
@@ -21,13 +28,17 @@ public class LaravelRunConfSettingsEditor extends SettingsEditor<LaravelRunConf>
     private JButton portSetDefault;
     private JButton routeSetDefault;
     private JPanel browserInputContainer;
+    private JPanel phpInputContainer;
     private BrowserSelector browserInput;
+    private PhpInterpreterComboBox phpInput;
+    private Project project;
     @Override
     protected void resetEditorFrom(@NotNull LaravelRunConf laravelRunConf) {
         hostInput.setText(laravelRunConf.getHost());
         portInput.setValue(laravelRunConf.getPort());
         routeInput.setText(laravelRunConf.getRoute());
         browserInput.setSelected(laravelRunConf.getBrowser());
+        phpInput.reset(laravelRunConf.getInterpreter().getName());
     }
 
     @Override
@@ -36,6 +47,8 @@ public class LaravelRunConfSettingsEditor extends SettingsEditor<LaravelRunConf>
         laravelRunConf.setPort((int) portInput.getValue());
         laravelRunConf.setRoute(routeInput.getText());
         laravelRunConf.setBrowser(browserInput.getSelected());
+        laravelRunConf.setInterpreter(PhpInterpretersManagerImpl.getInstance(project)
+                .findInterpreter(phpInput.getSelectedItemName()));
     }
 
     @NotNull
@@ -53,9 +66,17 @@ public class LaravelRunConfSettingsEditor extends SettingsEditor<LaravelRunConf>
         browserInput = new BrowserSelector();
         browserInputContainer = new JPanel(new GridLayout(0, 1));
         browserInputContainer.add(browserInput.getMainComponent());
+
+        phpInput = new PhpInterpreterComboBox(project, null, true);
+        phpInput.setModel(PhpInterpretersManagerImpl.getInstance(project).getInterpreters(), null);
+        phpInput.setNoItemText("Default (/bin/php)");
+        phpInputContainer = new JPanel(new GridLayout(0, 1));
+        phpInputContainer.add(phpInput);
     }
 
-    public LaravelRunConfSettingsEditor() {
+
+    public LaravelRunConfSettingsEditor(Project project) {
+        this.project = project;
         ActionListener listener = actionEvent -> {
             if (actionEvent.getSource() == hostSetDefault)
                 hostInput.setText("localhost");

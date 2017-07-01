@@ -3,8 +3,7 @@ package com.smartbit8.laravelstorm.run;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.ide.browsers.*;
 import com.intellij.openapi.options.SettingsEditor;
@@ -13,6 +12,8 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.xmlb.SkipDefaultsSerializationFilter;
 import com.intellij.util.xmlb.XmlSerializer;
+import com.jetbrains.php.config.interpreters.PhpInterpreter;
+import com.jetbrains.php.config.interpreters.PhpInterpretersManagerImpl;
 import com.smartbit8.laravelstorm.ui.LaravelRunConfSettingsEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,8 @@ public class LaravelRunConf extends RunConfigurationBase {
     private int port = 8000;
     private String route = "/";
     private WebBrowser browser;
+    private PhpInterpreter interpreter;
+
 
 
     LaravelRunConf(@NotNull Project project, @NotNull ConfigurationFactory factory, String name) {
@@ -41,6 +44,7 @@ public class LaravelRunConf extends RunConfigurationBase {
         this.port = settings.port;
         this.route = settings.route;
         this.browser = WebBrowserManager.getInstance().findBrowserById(settings.browser);
+        this.interpreter = PhpInterpretersManagerImpl.getInstance(getProject()).findInterpreter(settings.interpreterName);
 
     }
 
@@ -55,6 +59,11 @@ public class LaravelRunConf extends RunConfigurationBase {
         else
             settings.browser = "";
 
+        if (this.interpreter != null)
+            settings.interpreterName = this.interpreter.getName();
+        else
+            settings.interpreterName = "";
+
         XmlSerializer.serializeInto(settings, element, new SkipDefaultsSerializationFilter());
         super.writeExternal(element);
     }
@@ -62,26 +71,35 @@ public class LaravelRunConf extends RunConfigurationBase {
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new LaravelRunConfSettingsEditor();
+        return new LaravelRunConfSettingsEditor(getProject());
     }
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {}
 
+
     @Nullable
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment executionEnvironment) throws ExecutionException {
+
         return new CommandLineState(executionEnvironment) {
             @NotNull
             @Override
             protected ProcessHandler startProcess() throws ExecutionException {
-                GeneralCommandLine cmd = new GeneralCommandLine("php", "artisan", "serve", "--host=" + host, "--port="+ port);
+                String phpExec = (interpreter != null? interpreter.getPathToPhpExecutable():"php");
+
+                GeneralCommandLine cmd = new GeneralCommandLine(phpExec, "artisan", "serve", "--host=" + host, "--port="+ port);
                 cmd.setWorkDirectory(project.getBasePath());
 
+
+
                 BrowserLauncher.getInstance().browse("http://" + host + ":" + port +
-                        (route.startsWith("/")? route : "/" + route), browser);
+                        (route.startsWith("/") ? route : "/" + route), browser);
+
+
                 return new OSProcessHandler(cmd);
             }
+
         };
     }
 
@@ -117,11 +135,20 @@ public class LaravelRunConf extends RunConfigurationBase {
         this.browser = browser;
     }
 
+    public PhpInterpreter getInterpreter() {
+        return interpreter;
+    }
+
+    public void setInterpreter(PhpInterpreter interpreter) {
+        this.interpreter = interpreter;
+    }
+
     public static class Settings {
         public String host;
         public int port;
         public String route;
         public String browser;
+        public String interpreterName;
     }
 
 }

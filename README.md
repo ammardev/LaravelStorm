@@ -1,8 +1,13 @@
 # LaravelStorm
 Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with laravel .
 
+https://plugins.jetbrains.com/plugin/9795-laravelstorm
+
 **This is not a framework support plugin. If you are searching for a framework support use [Laravel Plugin](https://plugins.jetbrains.com/plugin/7532-laravel-plugin) . My plugin is only add some useful tools to deal with laravel easier.**
-##Current Tools:
+
+
+
+## Current Tools:
 
 *  Run Configuration: Allow user to run `php artisan serve` from the run menu in the IDE without using terminal (You can insert a custom port and host).
 
@@ -15,6 +20,8 @@ Simple IntelliJIdea & PhpStorm plugin to add some useful tools to use with larav
 
 ---
 
-##TODO:
+## TODO:
 
 * Add migrations manager to manage migrations without writing commands.
+* View the contents of Laravel.log and add filtering for the log type while running the server .
+* Add a simple documentation .
