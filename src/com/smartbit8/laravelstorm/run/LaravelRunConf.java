@@ -92,7 +92,7 @@ public class LaravelRunConf extends RunConfigurationBase {
                 String phpExec = (interpreter != null? interpreter.getPathToPhpExecutable():"php");
 
                 GeneralCommandLine cmd = new GeneralCommandLine(phpExec, "artisan", "serve", "--host=" + host, "--port="+ port);
-//                cmd.setWorkDirectory(project.getBasePath());
+                cmd.setWorkDirectory(project.getBasePath());
 
 
                 OSProcessHandler handler = new OSProcessHandler(cmd);
