@@ -9,6 +9,7 @@ import com.intellij.ide.browsers.*;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.xmlb.SkipDefaultsSerializationFilter;
 import com.intellij.util.xmlb.XmlSerializer;
@@ -18,6 +19,8 @@ import com.smartbit8.laravelstorm.ui.LaravelRunConfSettingsEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 
 public class LaravelRunConf extends RunConfigurationBase {
@@ -89,15 +92,32 @@ public class LaravelRunConf extends RunConfigurationBase {
                 String phpExec = (interpreter != null? interpreter.getPathToPhpExecutable():"php");
 
                 GeneralCommandLine cmd = new GeneralCommandLine(phpExec, "artisan", "serve", "--host=" + host, "--port="+ port);
-                cmd.setWorkDirectory(project.getBasePath());
+//                cmd.setWorkDirectory(project.getBasePath());
+
+
+                OSProcessHandler handler = new OSProcessHandler(cmd);
+
+                handler.addProcessListener(new ProcessAdapter() {
+                    @Override
+                    public void onTextAvailable(ProcessEvent event, Key outputType) {
+                        String text = event.getText();
+                        if (text != null){
+                            if (text.startsWith("Laravel development server started:")){
+                                BrowserLauncher.getInstance().browse("http://" + host + ":" + port +
+                                        (route.startsWith("/") ? route : "/" + route), browser);
+                                handler.removeProcessListener(this);
+
+                            }
+                        }
+
+                    }
+                });
+
+                new LaravelRunMgr(handler, new File(getProject().getBasePath()+("/storage/logs/laravel.log")));
 
 
 
-                BrowserLauncher.getInstance().browse("http://" + host + ":" + port +
-                        (route.startsWith("/") ? route : "/" + route), browser);
-
-
-                return new OSProcessHandler(cmd);
+                return handler;
             }
 
         };

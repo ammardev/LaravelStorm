@@ -9,7 +9,9 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      Add PHP interpreter selector in run configuration settings .
+      Show Laravel logs in the run window .
+      Add PHP interpreter selector in run configuration settings.
+      Web browser won't open if the Laravel server doesn't start.
     ]]>
   </change-notes>
 
