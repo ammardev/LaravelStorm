@@ -38,7 +38,10 @@ public class LaravelRunConfSettingsEditor extends SettingsEditor<LaravelRunConf>
         portInput.setValue(laravelRunConf.getPort());
         routeInput.setText(laravelRunConf.getRoute());
         browserInput.setSelected(laravelRunConf.getBrowser());
-        phpInput.reset(laravelRunConf.getInterpreter().getName());
+        if  (laravelRunConf.getInterpreter() != null)
+            phpInput.reset(laravelRunConf.getInterpreter().getName());
+        else
+            phpInput.reset();
     }
 
     @Override
