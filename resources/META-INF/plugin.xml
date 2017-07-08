@@ -1,17 +1,24 @@
 <idea-plugin>
   <id>com.smartbit8.laravelStorm.intellij</id>
   <name>LaravelStorm</name>
-  <version>1.0</version>
+  <version>1.2</version>
   <vendor email="3mmar.g97@gmail.com" url="">SmartBit8</vendor>
 
   <description><![CDATA[
-      Useful tools for laravel development in IntelliJIdea and PhpStorm
+      Useful tools for laravel development in IntelliJIdea and PhpStorm.<br><br>
+
+      Current Tools :<br>
+      <ul>
+          <li><strong>Laravel Files Creation Manager :</strong> Add an option in `New menu` to create laravel files
+          (Such as Controllers, Models, Migrations ... etc) without writing any command using a simple menu.</li>
+          <li><strong>Run Configuration :</strong> Allow user to run <code>php artisan serve</code> from the
+          run menu in the IDE without using terminal (You can insert a custom port and host).</li>
+      </ul>
     ]]></description>
 
   <change-notes><![CDATA[
-      Show Laravel logs in the run window .
-      Add PHP interpreter selector in run configuration settings.
-      Web browser won't open if the Laravel server doesn't start.
+  Add more laravel files that you can create. <br>
+  Remove the file creator dialog and replace it with a menu.<br>
     ]]>
   </change-notes>
 
@@ -25,9 +32,53 @@
   </extensions>
 
   <actions>
-    <action id="LaravelStorm.FileMaker" class="com.smartbit8.laravelstorm.actions.FileMaker"
-            text="Laravel file">
+    <group id="LaravelStorm.FileMakerGroup" text="Laravel File" popup="true" icon="/icons/laravel.png">
       <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+    </group>
+
+    <action id="LaravelStorm.Maker.Controller" class="com.smartbit8.laravelstorm.actions.ControllerMaker"
+            text="Controller">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Middleware" class="com.smartbit8.laravelstorm.actions.MiddlewareMaker"
+            text="Middleware">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Model" class="com.smartbit8.laravelstorm.actions.ModelMaker"
+            text="Model">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Migration" class="com.smartbit8.laravelstorm.actions.MigrationMaker"
+            text="Migration">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Seeder" class="com.smartbit8.laravelstorm.actions.SeederMaker"
+            text="Seeder">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Auth" class="com.smartbit8.laravelstorm.actions.AuthMaker"
+            text="Login views and routes">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Mail" class="com.smartbit8.laravelstorm.actions.MailMaker"
+            text="Create a new email class">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Notification" class="com.smartbit8.laravelstorm.actions.NotificationMaker"
+            text="Create a new notification class">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
+    </action>
+
+    <action id="LaravelStorm.Maker.Request" class="com.smartbit8.laravelstorm.actions.RequestMaker"
+            text="Create a new request class">
+      <add-to-group group-id="LaravelStorm.FileMakerGroup"/>
     </action>
 
   </actions>

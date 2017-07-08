@@ -19,16 +19,24 @@ public class FileMakerDlg extends DialogWrapper{
 
     private JPanel mainPanel;
     private JTextField fileName;
-    private ComboBox<Item> fileTypeChooser;
+    private JCheckBox additionCommandCheckBox;
     private Project project;
-    private Item items[] = new Item[6];
-
-    public FileMakerDlg(@Nullable Project project) {
+    private String artisanCommand;
+    private String optionCmdParameter;
+    public FileMakerDlg(@Nullable Project project, String artisanCommand) {
         super(project);
         this.project = project;
+        this.artisanCommand = artisanCommand;
         init();
-        setTitle("Choose File Type");
+        setTitle("New Laravel File");
         setResizable(false);
+    }
+
+    public FileMakerDlg(@Nullable Project project, String artisanCommand, String optionText, String optionCmdParameter) {
+        this(project, artisanCommand);
+        this.additionCommandCheckBox.setVisible(true);
+        this.additionCommandCheckBox.setText(optionText);
+        this.optionCmdParameter = optionCmdParameter;
     }
 
     @Nullable
@@ -47,18 +55,6 @@ public class FileMakerDlg extends DialogWrapper{
         return mainPanel;
     }
 
-    private void createUIComponents() {
-        items[0] = new Item("Controller", Icons.CONTROLLER,"make:controller");
-        items[1] = new Item("Middleware", Icons.MIDDLEWARE,"make:middleware");
-        items[2] = new Item("Model", Icons.MODEL,"make:model");
-        items[3] = new Item("Model with migration", Icons.MODEL_WITH_MIGRATION,"make:model", "-m");
-        items[4] = new Item("Migration", Icons.MIGRATION,"make:migration");
-        items[5] = new Item("Seeder", Icons.SEEDER,"make:seeder");
-        // TODO: initialize the array from xml conf file and let the user show or hide any command from the settings
-
-        fileTypeChooser = new ComboBox<>(items);
-        fileTypeChooser.setRenderer(new Renderer<>());
-    }
 
     @Override
     protected void doOKAction() {
@@ -72,7 +68,10 @@ public class FileMakerDlg extends DialogWrapper{
         GeneralCommandLine cmd = new GeneralCommandLine("php", "artisan");
         cmd.setWorkDirectory(project.getBasePath());
 
-        cmd.addParameters(items[fileTypeChooser.getSelectedIndex()].getCommands());
+        cmd.addParameter(artisanCommand);
+
+        if (additionCommandCheckBox.isSelected())
+            cmd.addParameter(optionCmdParameter);
 
         cmd.addParameter(fileName.getText());
 

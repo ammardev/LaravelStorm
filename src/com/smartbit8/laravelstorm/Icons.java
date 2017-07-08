@@ -9,6 +9,9 @@ public interface Icons {
     Icon MIDDLEWARE           = IconLoader.getIcon("/icons/Middleware.png");
     Icon MIGRATION            = IconLoader.getIcon("/icons/Migration.png");
     Icon MODEL                = IconLoader.getIcon("/icons/Model.png");
-    Icon MODEL_WITH_MIGRATION = IconLoader.getIcon("/icons/Model_with_migration.png");
-    Icon SEEDER = IconLoader.getIcon("/icons/Seeder.png");
+    Icon SEEDER               = IconLoader.getIcon("/icons/Seeder.png");
+    Icon AUTH                 = IconLoader.getIcon("/icons/Auth.png");
+    Icon MAIL                 = IconLoader.getIcon("/icons/Mail.png");
+    Icon NOTIFICATION         = IconLoader.getIcon("/icons/Notification.png");
+    Icon REQUEST              = IconLoader.getIcon("/icons/Request.png");
 }

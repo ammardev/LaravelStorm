@@ -24,18 +24,13 @@
         </constraints>
         <properties/>
       </component>
-      <component id="33379" class="com.intellij.openapi.ui.ComboBox" binding="fileTypeChooser" custom-create="true" default-binding="true">
+      <component id="2b0f1" class="javax.swing.JCheckBox" binding="additionCommandCheckBox">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="662fe" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="FileType:"/>
+          <text value="CheckBox"/>
+          <visible value="false"/>
         </properties>
       </component>
     </children>
