@@ -30,8 +30,11 @@ public class LaravelRunMgr implements Runnable {
 
                 String line;
                 while ((line = reader.readLine()) != null){
-                    handler.notifyTextAvailable(line+"\n",
-                            line.contains(".ERROR: ")?ProcessOutputTypes.STDERR:ProcessOutputTypes.STDOUT);
+                    if (line.contains(".ERROR: ") || line.equals("Stack trace:") || line.matches("(#\\d+ .+)"))
+                        handler.notifyTextAvailable(line + "\n",ProcessOutputTypes.STDERR);
+                    else
+                        handler.notifyTextAvailable(line + "\n",ProcessOutputTypes.STDOUT);
+
                     pointer = file.length();
                 }
 
