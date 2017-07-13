@@ -23,5 +23,5 @@ https://plugins.jetbrains.com/plugin/9795-laravelstorm
 ## TODO:
 
 * Add migrations manager to manage migrations without writing commands.
-* View the contents of Laravel.log and add filtering for the log type while running the server .
+* Filter the Laravel.log output.
 * Add a simple documentation .
