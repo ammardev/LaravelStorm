@@ -1,17 +1,18 @@
 package com.smartbit8.laravelstorm.run;
 
 import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 
 import java.io.*;
 
 public class LaravelRunMgr implements Runnable {
 
-    private OSProcessHandler handler;
+    private ProcessHandler handler;
     private long pointer;
     private File file;
 
-    LaravelRunMgr(OSProcessHandler handler, File file) {
+    LaravelRunMgr(ProcessHandler handler, File file) {
         this.handler = handler;
         this.file = file;
         pointer = file.length();
@@ -21,7 +22,7 @@ public class LaravelRunMgr implements Runnable {
     @Override
     public void run() {
 
-        while (handler.getProcess().isAlive()){
+        while (!handler.isProcessTerminated()){
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -34,6 +35,7 @@ public class LaravelRunMgr implements Runnable {
                         handler.notifyTextAvailable(line + "\n",ProcessOutputTypes.STDERR);
                     else
                         handler.notifyTextAvailable(line + "\n",ProcessOutputTypes.STDOUT);
+
 
                     pointer = file.length();
                 }

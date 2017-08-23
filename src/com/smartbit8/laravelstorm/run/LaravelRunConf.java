@@ -40,6 +40,27 @@ public class LaravelRunConf extends RunConfigurationBase {
     }
 
     @Override
+    public void createAdditionalTabComponents(AdditionalTabComponentManager manager, ProcessHandler startedProcess) {
+        LogTab logTab = new LogTab(getProject());
+
+        manager.addAdditionalTabComponent(logTab, "Laravel.log");
+
+        startedProcess.addProcessListener(new ProcessAdapter() {
+            @Override
+            public void startNotified(ProcessEvent event) {
+                logTab.start();
+            }
+
+            @Override
+            public void processTerminated(ProcessEvent event) {
+                startedProcess.removeProcessListener(this);
+            }
+        });
+
+
+    }
+
+    @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
         Settings settings = XmlSerializer.deserialize(element, Settings.class);
@@ -113,7 +134,7 @@ public class LaravelRunConf extends RunConfigurationBase {
                     }
                 });
 
-                new LaravelRunMgr(handler, new File(getProject().getBasePath()+("/storage/logs/laravel.log")));
+//                new LaravelRunMgr(handler, new File(getProject().getBasePath()+("/storage/logs/laravel.log")));
 
 
 
